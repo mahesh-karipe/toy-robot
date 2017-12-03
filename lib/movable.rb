@@ -1,24 +1,28 @@
 class InvalidCommand < Exception; end
 module Movable
 
-  NORTH, EAST, SOUTH, WEST = :NORTH, :EAST, :SOUTH, :WEST
+  NORTH, EAST, SOUTH, WEST = 'NORTH', 'EAST', 'SOUTH', 'WEST'
   DIRECTIONS = [NORTH, EAST, SOUTH, WEST]
 
   attr_reader :x, :y, :direction, :table_top
 
-  def initialize(table_top)
-    @table_top = table_top
+  def initialize(table_top, logger)
+    @table_top, @logger, @placed = table_top, logger, false
   end
 
   def place(x, y, direction)
     raise InvalidCommand, "direction should be one of #{DIRECTIONS.join(', ')}" unless
-      DIRECTIONS.include?(direction.upcase.to_sym)
+      DIRECTIONS.include?(direction.strip.upcase)
 
+    x , y = Integer(x), Integer(y) rescue raise InvalidCommand
     raise InvalidCommand unless table_top.valid_position?(x, y)
-    @x, @y, @direction = x, y, direction
+
+    @x, @y, @direction, @placed = x, y, direction, true
   end
 
   def move(steps=1)
+    raise InvalidCommand unless @placed
+
     dx, dy = case direction
                when NORTH
                  [0, +steps]
@@ -37,14 +41,24 @@ module Movable
   end
 
   def left
+    raise InvalidCommand unless @placed
+
     @direction = DIRECTIONS[(DIRECTIONS.index(direction) - 1) % DIRECTIONS.length]
   end
 
   def right
+    raise InvalidCommand unless @placed
+
     @direction = DIRECTIONS[(DIRECTIONS.index(direction) + 1) % DIRECTIONS.length]
   end
 
   def report
-    "#{x},#{y},#{direction}"
+    raise InvalidCommand unless @placed
+
+    @logger.info "#{x},#{y},#{direction}"
+  end
+
+  def method_missing(method, *args, &block)
+    raise InvalidCommand, "Unknown command #{method}"
   end
 end

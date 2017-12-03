@@ -10,7 +10,7 @@ describe Movable do
   describe '#place' do
     context 'when called with valid arguments' do
       before :all do
-        @obj.place(1,2,:NORTH)
+        @obj.place(1,2, Movable::NORTH)
       end
 
       it 'should assign the right x position' do
@@ -22,7 +22,7 @@ describe Movable do
       end
 
       it 'should assign the right direction' do
-        expect(@obj.direction).to eq(:NORTH)
+        expect(@obj.direction).to eq(Movable::NORTH)
       end
     end
 
@@ -30,8 +30,8 @@ describe Movable do
       it 'should raise InvalidCommand exception for invalid x & y' do
         allow(@obj.table_top).to receive(:valid_position?).and_return(false)
 
-        expect { @obj.place(6, 5, :NORTH) } .to raise_exception(InvalidCommand)
-        expect { @obj.place(5, 6, :NORTH) } .to raise_exception(InvalidCommand)
+        expect { @obj.place(6, 5, Movable::NORTH) } .to raise_exception(InvalidCommand)
+        expect { @obj.place(5, 6, Movable::NORTH) } .to raise_exception(InvalidCommand)
       end
 
       it 'should raise InvalidCommand exception for invalid direction' do
@@ -43,7 +43,7 @@ describe Movable do
   describe '#move' do
     context 'when it is an invalid move' do
       it 'should raise InvalidCommand exception' do
-        @obj.place(1,1,:NORTH)
+        @obj.place(1,1,Movable::NORTH)
 
         allow(@obj.table_top).to receive(:valid_position?).and_return(false)
         expect { @obj.move }.to raise_exception(InvalidCommand)
@@ -52,7 +52,7 @@ describe Movable do
 
     context 'when current direction is NORTH' do
       it 'should move 1 step north' do
-        @obj.place(1,1,:NORTH)
+        @obj.place(1,1,Movable::NORTH)
         @obj.move
 
         expect(@obj.y).to eq(2)
@@ -61,7 +61,7 @@ describe Movable do
 
     context 'when current direction is EAST' do
       it 'should move 1 step east' do
-        @obj.place(1,1,:EAST)
+        @obj.place(1,1,Movable::EAST)
         @obj.move
 
         expect(@obj.x).to eq(2)
@@ -70,7 +70,7 @@ describe Movable do
 
     context 'when current direction is WEST' do
       it 'should move 1 step east' do
-        @obj.place(1,1,:WEST)
+        @obj.place(1,1,Movable::WEST)
         @obj.move
 
         expect(@obj.x).to eq(0)
@@ -79,7 +79,7 @@ describe Movable do
 
     context 'when current direction is SOUTH' do
       before :all do
-        @obj.place(1,1,:SOUTH)
+        @obj.place(1,1,Movable::SOUTH)
       end
 
       it 'should move 1 step east' do
@@ -92,37 +92,37 @@ describe Movable do
   describe '#left' do
     context 'when current direction is NORTH' do
       it 'should turn return WEST' do
-        @obj.place(1,1,:NORTH)
+        @obj.place(1,1,Movable::NORTH)
         @obj.left
 
-        expect(@obj.direction).to eq(:WEST)
+        expect(@obj.direction).to eq(Movable::WEST)
       end
     end
 
     context 'when current direction is WEST' do
       it 'should turn return SOUTH' do
-        @obj.place(1,1,:WEST)
+        @obj.place(1,1,Movable::WEST)
         @obj.left
 
-        expect(@obj.direction).to eq(:SOUTH)
+        expect(@obj.direction).to eq(Movable::SOUTH)
       end
     end
 
     context 'when current direction is SOUTH' do
       it 'should turn return EAST' do
-        @obj.place(1,1,:SOUTH)
+        @obj.place(1,1,Movable::SOUTH)
         @obj.left
 
-        expect(@obj.direction).to eq(:EAST)
+        expect(@obj.direction).to eq(Movable::EAST)
       end
     end
 
     context 'when current direction is EAST' do
       it 'should turn return NORTH' do
-        @obj.place(1,1,:EAST)
+        @obj.place(1,1,Movable::EAST)
         @obj.left
 
-        expect(@obj.direction).to eq(:NORTH)
+        expect(@obj.direction).to eq(Movable::NORTH)
       end
     end
   end
@@ -130,37 +130,37 @@ describe Movable do
   describe '#right' do
     context 'when current direction is NORTH' do
       it 'should turn return EAST' do
-        @obj.place(1,1,:NORTH)
+        @obj.place(1,1,Movable::NORTH)
         @obj.right
 
-        expect(@obj.direction).to eq(:EAST)
+        expect(@obj.direction).to eq(Movable::EAST)
       end
     end
 
     context 'when current direction is WEST' do
       it 'should turn return NORTH' do
-        @obj.place(1,1,:WEST)
+        @obj.place(1,1,Movable::WEST)
         @obj.right
 
-        expect(@obj.direction).to eq(:NORTH)
+        expect(@obj.direction).to eq(Movable::NORTH)
       end
     end
 
     context 'when current direction is SOUTH' do
       it 'should turn return WEST' do
-        @obj.place(1,1,:SOUTH)
+        @obj.place(1,1,Movable::SOUTH)
         @obj.right
 
-        expect(@obj.direction).to eq(:WEST)
+        expect(@obj.direction).to eq(Movable::WEST)
       end
     end
 
     context 'when current direction is EAST' do
       it 'should turn return SOUTH' do
-        @obj.place(1,1,:EAST)
+        @obj.place(1,1,Movable::EAST)
         @obj.right
 
-        expect(@obj.direction).to eq(:SOUTH)
+        expect(@obj.direction).to eq(Movable::SOUTH)
       end
     end
   end
