@@ -1,4 +1,5 @@
 require_relative 'robot'
+require_relative 'table_top'
 require 'logger'
 
 module Simulator
