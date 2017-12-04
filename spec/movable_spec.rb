@@ -1,10 +1,11 @@
 require 'movable'
+require 'logger'
 
 describe Movable do
   before :all do
     movable_class = Class.new { include Movable }
     table_top = TableTop.new
-    @obj = movable_class.new(table_top)
+    @obj = movable_class.new(table_top, Logger.new(STDOUT))
   end
 
   describe '#place' do
@@ -35,7 +36,7 @@ describe Movable do
       end
 
       it 'should raise InvalidCommand exception for invalid direction' do
-        expect { @obj.place(1, 1, :INVALID) } .to raise_exception(InvalidCommand)
+        expect { @obj.place(1, 1, 'INVALID') } .to raise_exception(InvalidCommand)
       end
     end
   end
@@ -171,7 +172,8 @@ describe Movable do
       allow(@obj).to receive(:y).and_return('y')
       allow(@obj).to receive(:direction).and_return('dir')
 
-      expect(@obj.report).to eq('x,y,dir')
+      expect_any_instance_of(Logger).to receive(:info).with('x,y,dir')
+      @obj.report
     end
   end
 end
